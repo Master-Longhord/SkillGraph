@@ -107,7 +107,7 @@ const developerProjects = [
   { devId: 'dev-1', projId: 'proj-1', role: 'Principal Architect', startedAt: '2023-01', endedAt: 'Present' },
   { devId: 'dev-4', projId: 'proj-1', role: 'Senior Payments Engineer', startedAt: '2023-03', endedAt: 'Present' },
   { devId: 'dev-9', projId: 'proj-1', role: 'Go Backend Lead', startedAt: '2023-05', endedAt: '2024-06' },
-  
+
   { devId: 'dev-2', projId: 'proj-2', role: 'Frontend Lead', startedAt: '2022-08', endedAt: '2023-11' },
   { devId: 'dev-5', projId: 'proj-2', role: 'IoT Integration Engineer', startedAt: '2022-09', endedAt: 'Present' },
 
@@ -188,15 +188,15 @@ const technologyRelationships = [
 ];
 
 async function seedDatabase() {
-  console.log('🚀 Starting CognoDB Database Seeding...');
+  console.log(' Starting CognoDB Database Seeding...');
   const driver = getDriver();
   const session = driver.session();
 
   try {
-    console.log('🧹 Clearing existing database graph data...');
+    console.log('Clearing existing database graph data...');
     await session.run('MATCH (n) DETACH DELETE n');
 
-    console.log('📦 Seeding Developers...');
+    console.log('Seeding Developers...');
     await session.run(
       `UNWIND $developers AS dev
        CREATE (d:Developer {
@@ -209,7 +209,7 @@ async function seedDatabase() {
       { developers }
     );
 
-    console.log('🧠 Seeding Skills...');
+    console.log('Seeding Skills...');
     await session.run(
       `UNWIND $skills AS skill
        CREATE (s:Skill {
@@ -220,7 +220,7 @@ async function seedDatabase() {
       { skills }
     );
 
-    console.log('🛠️ Seeding Technologies...');
+    console.log('Seeding Technologies...');
     await session.run(
       `UNWIND $technologies AS tech
        CREATE (t:Technology {
@@ -231,7 +231,7 @@ async function seedDatabase() {
       { technologies }
     );
 
-    console.log('🚀 Seeding Projects...');
+    console.log('Seeding Projects...');
     await session.run(
       `UNWIND $projects AS proj
        CREATE (p:Project {
@@ -244,7 +244,7 @@ async function seedDatabase() {
       { projects }
     );
 
-    console.log('🏢 Seeding Companies...');
+    console.log('Seeding Companies...');
     await session.run(
       `UNWIND $companies AS comp
        CREATE (c:Company {
@@ -255,7 +255,7 @@ async function seedDatabase() {
       { companies }
     );
 
-    console.log('🌐 Seeding Domains...');
+    console.log('Seeding Domains...');
     await session.run(
       `UNWIND $domains AS dom
        CREATE (d:Domain {
@@ -266,7 +266,7 @@ async function seedDatabase() {
       { domains }
     );
 
-    console.log('🔗 Creating HAS_SKILL relationships...');
+    console.log('Creating HAS_SKILL relationships...');
     await session.run(
       `UNWIND $developerSkills AS rel
        MATCH (d:Developer {id: rel.devId}), (s:Skill {id: rel.skillId})
@@ -274,7 +274,7 @@ async function seedDatabase() {
       { developerSkills }
     );
 
-    console.log('🔗 Creating WORKED_ON relationships...');
+    console.log('Creating WORKED_ON relationships...');
     await session.run(
       `UNWIND $developerProjects AS rel
        MATCH (d:Developer {id: rel.devId}), (p:Project {id: rel.projId})
@@ -286,7 +286,7 @@ async function seedDatabase() {
       { developerProjects }
     );
 
-    console.log('🔗 Creating WORKED_AT relationships...');
+    console.log('Creating WORKED_AT relationships...');
     await session.run(
       `UNWIND $developerCompanies AS rel
        MATCH (d:Developer {id: rel.devId}), (c:Company {id: rel.compId})
@@ -298,7 +298,7 @@ async function seedDatabase() {
       { developerCompanies }
     );
 
-    console.log('🔗 Creating USES relationships...');
+    console.log('Creating USES relationships...');
     await session.run(
       `UNWIND $projectTechnologies AS rel
        MATCH (p:Project {id: rel.projId}), (t:Technology {id: rel.techId})
@@ -306,7 +306,7 @@ async function seedDatabase() {
       { projectTechnologies }
     );
 
-    console.log('🔗 Creating IN_DOMAIN relationships...');
+    console.log('Creating IN_DOMAIN relationships...');
     await session.run(
       `UNWIND $projectDomains AS rel
        MATCH (p:Project {id: rel.projId}), (d:Domain {id: rel.domId})
@@ -314,7 +314,7 @@ async function seedDatabase() {
       { projectDomains }
     );
 
-    console.log('🔗 Creating RELATED_TO relationships...');
+    console.log('Creating RELATED_TO relationships...');
     await session.run(
       `UNWIND $technologyRelationships AS rel
        MATCH (t1:Technology {id: rel.tech1}), (t2:Technology {id: rel.tech2})
@@ -335,7 +335,7 @@ async function seedDatabase() {
     `);
 
     const rec = countsResult.records[0];
-    console.log('✅ Seeding Complete! Summary Stats:');
+    console.log(' Seeding Complete! Summary Stats:');
     console.log(` - Developers: ${rec.get('devs')}`);
     console.log(` - Projects: ${rec.get('projs')}`);
     console.log(` - Technologies: ${rec.get('techs')}`);
@@ -344,7 +344,7 @@ async function seedDatabase() {
     console.log(` - Domains: ${rec.get('doms')}`);
     console.log(` - Total Relationships: ${rec.get('rels')}`);
   } catch (error) {
-    console.error('❌ Seeding failed:', error);
+    console.error(' Seeding failed:', error);
     process.exit(1);
   } finally {
     await session.close();
